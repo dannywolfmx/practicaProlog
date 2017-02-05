@@ -20,11 +20,13 @@ generadorPalabras(Alfabeto,TamMin,TamMax,Salida,Iterador):-
             random_between(TamMin,TamMax,TamPalabra),
             generaPalabra(Alfabeto,TamPalabra,PalabraGenerada),
             write(Lista),
-            Salida = [PalabraGenerada|Lista],
             %Colocar aqui el member, (Ya que la lista este en uso).
-           %\+ member(PalabraGenerada,Lista)
+            %\+ member(PalabraGenerada,Lista)
             NuevoIterador is Iterador-1,
-            generadorPalabras(Alfabeto,TamMin,TamMax,Lista,NuevoIterador).
+            generadorPalabras(Alfabeto,TamMin,TamMax,Lista,NuevoIterador),
+            compara(PalabraGenerada,Lista).
+            Salida = [PalabraGenerada|Lista].
+
 
 %alfabeto(Letras), generaPalabra(Letras,5,Palabra).
 generaPalabra(_,0,[]). % Caso en el cual la lista y el tamaño es 0, por lo cual ya termino su cometido.
