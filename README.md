@@ -5,7 +5,7 @@ Cree un listado de 1000 palabras generadas aleatoriamente cuyo tamaño, de la pa
 
 15 letras minúsculas.
 
-• Cada palabra deberá ser diferente entre todas.
+ - [x] Cada palabra deberá ser diferente entre todas.
 
 • Implemente una regla para visualizar el conjunto de palabras generadas.
 
