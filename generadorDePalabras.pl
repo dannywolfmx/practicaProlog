@@ -55,7 +55,9 @@ insertaArbol(P,nodo(R,Indice, Izquierda, Derecha), X , nodo(R,Indice, Izquierda,
         insertaArbol(P,Derecha, X, DerechaNueva).
 
 
-listaArbol([],Arbol,_):-Arbol = nodo(0,nulo,0,nulo). %hijo
+listaArbol([],Arbol,_):-
+	Arbol = nodo(0,0,nulo,nulo). %hijo
+
 listaArbol([Palabra|Y],Arbol,Iterador):-
                 NuevoIterador is Iterador + 1, 
                 listaArbol(Y,NuevaRama,NuevoIterador),
