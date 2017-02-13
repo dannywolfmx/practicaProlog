@@ -1,10 +1,10 @@
 %Daniel Menchaca Luna
 
 
-%alfabeto(Letras), generadorPalabras(Letras,10,15,Palabras,1000),ordenaListaPalabras(Palabras,Z),imprimePalabras(Palabras),listaArbol(Palabras,Arbol,0),write(Arbol).
+%alfabeto(Letras), generadorPalabras(Letras,10,15,Palabras,1000),listaArbol(Palabras,Arbol),aplanaArbol(Arbol,Re),write(Re).
 
 
-alfabeto([a,b,c,d,e,f,g,h,i,j,k,l,m,n,ñ,o,p,q,r,s,t,u,v,w,x,y,z]).
+alfabeto(['a','b','c','d','e','f','g','h','i','j','k','l','m','n','ñ','o','p','q','r','s','t','u','v','w','x','y','z']).
 %alfabeto([a,e,i,o,u]). % alfabeto mas pequeño para pruebas
 
 % Le indicamos el caso en que la lista es Vacia, dado que si no lo colocamos no se cicla. 
@@ -39,30 +39,59 @@ ordenaListaPalabras(Lista,Salida):-
 
 
 
+%Nodo es definido como nodo(NodoHijoIzquierdo,Palabra,Indice,NodoHijoDerecho)
+%Palabra, es la palabra como tal.
+%Indice, es utilizado para la comparacion y balancear.
+%NodoHijoIzquierdo es el nodo hijo del lado izquierdo
+%NodoHijoDerecho es el nodo hijo del lado derecho.
+
+valorMaximo(X,X,X).
+valorMaximo(X,Y,Z):- X > Y, Z = X.
+valorMaximo(X,Y,Z):- Y > X, Z = Y.
+
+alturaArbol(nulo,0).
+alturaArbol(nodo(NI,_,_,ND),Altura):-
+	alturaArbol(NI,Alt1),
+	alturaArbol(ND,Alt2),
+	valorMaximo(Alt1,Alt2,Alt), 
+	Altura is Alt + 1.
+
+balanceado(nulo).
+balanceado(nodo(NI,_,_,ND)):-
+	alturaArbol(NI,Alt),
+	alturaArbol(ND,Alt),
+	balanceado(NI),
+	balanceado(ND).
 
 
-insertaArbol(P,nulo, X, nodo(P,X, nulo, nulo)).
+insertaArbol(nulo, X, nodo(nulo, X, nulo)).
 
-insertaArbol(P,Arbol, X, Arbol) :- 
-        Arbol = nodo(P,X, _, _).
+insertaArbol(Arbol, X, Arbol):-Arbol =nodo(_,X,_).
 
-insertaArbol(P,nodo(R,Indice, Izquierda, Derecha), X,  nodo(R,Indice, IzquierdaNueva, Derecha)) :-
-         X < Indice, 
-         insertaArbol(P,Izquierda, X, IzquierdaNueva).
+insertaArbol(nodo(Izquierda,Indice, Derecha), X,  nodo(IzquierdaNueva,Indice, Derecha)) :-
+         X @< Indice, 
+         insertaArbol(Izquierda, X, IzquierdaNueva).
 
-insertaArbol(P,nodo(R,Indice, Izquierda, Derecha), X , nodo(R,Indice, Izquierda, DerechaNueva)) :-
-        X > Indice, 
-        insertaArbol(P,Derecha, X, DerechaNueva).
+insertaArbol(nodo(Izquierda,Indice, Derecha), X , nodo(Izquierda,Indice, DerechaNueva)) :-
+        X @> Indice, 
+        insertaArbol(Derecha, X, DerechaNueva).
+		
+
+listaArbol([],_). %hijo
+
+listaArbol([Palabra|Y],Arbol):-
+                listaArbol(Y,NuevaRama),
+                insertaArbol(NuevaRama,Palabra,Arbol).
 
 
-listaArbol([],Arbol,_):-
-	Arbol = nodo(0,0,nulo,nulo). %hijo
-
-listaArbol([Palabra|Y],Arbol,Iterador):-
-                NuevoIterador is Iterador + 1, 
-                listaArbol(Y,NuevaRama,NuevoIterador),
-                insertaArbol(Palabra,NuevaRama,NuevoIterador,H),
-                Arbol = H.
+aplanaArbol(nulo,[]).
+aplanaArbol(nodo(NodoHijoIzquierdo,_,Palabra,NodoHijoDerecho),ListaDePalabras):-
+		write(Palabra),
+		aplanaArbol(NodoHijoIzquierdo,PalabrasIzquierda),
+                N = [Palabra|PalabrasIzquierda],
+		aplanaArbol(NodoHijoDerecho,PalabrasDerecha),
+		ListaDePalabras = [N|PalabrasDerecha].
+	
 
 
 generadorPalabras(_,_,_,[],0).% Caso en el cual la lista y el tamaño es 0, por lo cual ya termino su cometido.
