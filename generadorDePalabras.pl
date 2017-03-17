@@ -13,11 +13,26 @@ alfabeto(['a','b','c','d','e','f','g','h','i','j','k','l','m','n','ñ','o','p','
 
 
 %alfabeto(Letras), generadorPalabras(Letras,5,15,Palabras,10).
+%alfabeto(Letras), generadorPalabras(Letras,5,15,Palabras,1000),listaArbol(Palabras,Arbol),write(Re).
 
 
+menu():-%Generamos las palabras aleatorias.
+        writeln("-----Generadorando las palabras aleatorias-----"),
+        alfabeto(Letras), generadorPalabras(Letras,5,15,Palabras,1000),
+        %Generamos el arbol.
+        writeln("-----Generando arbol-----"),
+        listaArbol(Palabras,Arbol),
+        %imprime arbol.
+        writeln("-----Imprime arbol-----"),
+        write(Arbol),
+        write("\n"),
+        writeln("-----Arbol-----"),
+        read(X),
+        write(X).
 
 
 imprimePalabras([]):-
+
             write("\n"),
             write("-----Fin de la lista----"),
             write("\n").
@@ -36,32 +51,13 @@ imprimeCaracter([X|Y]):-
 
 ordenaListaPalabras(Lista,Salida):-
             sort(Lista,Salida).
-
-
-
+            
 %Nodo es definido como nodo(NodoHijoIzquierdo,Palabra,Indice,NodoHijoDerecho)
 %Palabra, es la palabra como tal.
 %Indice, es utilizado para la comparacion y balancear.
 %NodoHijoIzquierdo es el nodo hijo del lado izquierdo
 %NodoHijoDerecho es el nodo hijo del lado derecho.
 
-valorMaximo(X,X,X).
-valorMaximo(X,Y,Z):- X > Y, Z = X.
-valorMaximo(X,Y,Z):- Y > X, Z = Y.
-
-alturaArbol(nulo,0).
-alturaArbol(nodo(NI,_,_,ND),Altura):-
-	alturaArbol(NI,Alt1),
-	alturaArbol(ND,Alt2),
-	valorMaximo(Alt1,Alt2,Alt), 
-	Altura is Alt + 1.
-
-balanceado(nulo).
-balanceado(nodo(NI,_,_,ND)):-
-	alturaArbol(NI,Alt),
-	alturaArbol(ND,Alt),
-	balanceado(NI),
-	balanceado(ND).
 
 
 insertaArbol(nulo, X, nodo(nulo, X, nulo)).
@@ -85,7 +81,7 @@ listaArbol([Palabra|Y],Arbol):-
 
 
 aplanaArbol(nulo,[]).
-aplanaArbol(nodo(NodoHijoIzquierdo,_,Palabra,NodoHijoDerecho),ListaDePalabras):-
+aplanaArbol(nodo(NodoHijoIzquierdo,_,NodoHijoDerecho),ListaDePalabras):-
 		write(Palabra),
 		aplanaArbol(NodoHijoIzquierdo,PalabrasIzquierda),
                 N = [Palabra|PalabrasIzquierda],
@@ -104,9 +100,7 @@ generadorPalabras(Alfabeto,TamMin,TamMax,Salida,Iterador):-
             NuevoIterador is Iterador - 1,
             generadorPalabras(Alfabeto,TamMin,TamMax,Lista,NuevoIterador),
             compara(PalabraGenerada,Lista,Salida,Alfabeto,TamMin,TamMax,NuevoIterador).
-            
-
-            
+                        
 
 compara(PalabraGenerada,Lista,Salida,_,_,_,_):- 
         \+ member(PalabraGenerada,Lista),
